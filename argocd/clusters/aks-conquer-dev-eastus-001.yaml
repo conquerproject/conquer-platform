@@ -1,0 +1,4 @@
+clusterName: "aks-conquer-dev-eastus-001"
+environment: "dev"
+server: "https://kubernetes.default.svc"
+revision: "HEAD"
