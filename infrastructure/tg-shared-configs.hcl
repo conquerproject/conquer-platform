@@ -1,7 +1,7 @@
 generate "backend" {
-  path = "backend.tf"
+  path      = "backend.tf"
   if_exists = "overwrite_terragrunt"
-  contents = <<EOF
+  contents  = <<EOF
     terraform {
       backend "azurerm" {
         resource_group_name = "rg-tfstate-dev-eastus-001"
@@ -9,6 +9,6 @@ generate "backend" {
         container_name  = "tfstate"
         key = "${path_relative_to_include()}/terraform.tfstate"
       }
-    } 
+    }
   EOF
 }

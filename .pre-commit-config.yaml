@@ -1,32 +1,41 @@
 # https://pre-commit.com/
 
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.3.0
-  hooks:
-  -   id: check-yaml              # Attempts to load all yaml files to verify syntax
-  -   id: check-json              # Attempts to load all json files to verify syntax
-  -   id: end-of-file-fixer       # Makes sure files end in a newline and only a newline.
-  -   id: trailing-whitespace     # Will trims all whitespace from the ends of lines
-  -   id: no-commit-to-branch     # Will prevent commiting to the main branch
-  -   id: check-added-large-files # Will not commit files larger than 500kb
-  -   id: check-merge-conflict    # Check for files that contain merge conflict strings.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml              # Attempts to load all yaml files to verify syntax
+    -   id: check-json              # Attempts to load all json files to verify syntax
+    -   id: end-of-file-fixer       # Makes sure files end in a newline and only a newline.
+    -   id: trailing-whitespace     # Will trims all whitespace from the ends of lines
+    -   id: no-commit-to-branch     # Will prevent commiting to the main branch
+    -   id: check-added-large-files # Will not commit files larger than 500kb
+    -   id: check-merge-conflict    # Check for files that contain merge conflict strings.
 
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: d0bcdb35c6999a4a120b528f050d2b11778fd3d0 # v0.1.23
+    hooks:
+      - id: terragrunt-hclfmt
+        name: Terragrunt hclfmt
+        description: Rewrites all Terragrunt configuration files to a canonical format
+        entry: hooks/terragrunt-hclfmt.sh
+        language: script
+        files: \.hcl$
+        exclude: >
+          (?x)^(
+          .+\.terraform\/.*$|
+          .+\.terragrunt-cache\/.*$|
+          )$
 
-- repo: https://github.com/gruntwork-io/pre-commit
-  rev: v0.1.23
-  hooks:
-    - id: terragrunt-hclfmt
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.86.0
+    hooks:
+      - id: terraform_fmt
 
-- repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.86.0
-  hooks:
-    - id: terraform_fmt
-
-- repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-  rev: v9.11.0
-  hooks:
-    - id: commitlint
-      stages: [commit-msg]
-      additional_dependencies:
-        - "@commitlint/config-conventional"
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: v9.11.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        additional_dependencies:
+          - "@commitlint/config-conventional"
