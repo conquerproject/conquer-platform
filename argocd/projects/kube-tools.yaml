@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: kube-tools
+  namespace: argocd
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: "ArgoCD Project that will contains all tools"
+  sourceRepos:
+  - '*'
+  destinations:
+  - namespace: 'kube-tools'
+    server: '*'
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'

@@ -1,0 +1,28 @@
+# This root application will apply all applicationsets under conquerproject/argocd/applicationsets/
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: root
+  namespace: argocd
+
+spec:
+  project: "default" # keep default for bootstrap
+  sources:
+    - repoURL: https://github.com/conquerproject/conquer-platform.git
+      targetRevision: &revision "feat/deploy-argocd-#15"
+      path: argocd/applicationsets
+      directory:
+        recurse: true
+
+    - repoURL: https://github.com/conquerproject/conquer-platform.git
+      targetRevision: *revision
+      path: argocd/projects
+
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+
+  syncPolicy:
+    automated: {}

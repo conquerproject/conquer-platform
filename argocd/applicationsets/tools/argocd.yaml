@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: "argocd"
+  namespace: "argocd"
+spec:
+  generators:
+    - git:
+        repoURL: "https://github.com/conquerproject/conquer-platform.git"
+        revision: "feat/deploy-argocd-#15"
+        files:
+          - path: "argocd/clusters/aks-conquer-dev-eastus-001.yaml"
+  template:
+    metadata:
+      name: "argocd-{{ clusterName }}"
+    spec:
+      project: "default"
+      source:
+        repoURL: "https://argoproj.github.io/argo-helm"
+        chart: "argo-cd"
+        targetRevision: "6.1"
+        helm:
+          releaseName: "argocd"
+
+      destination:
+        server: "{{ server }}"
+        namespace: "argocd"
+
+      syncPolicy:
+        automated: {}
