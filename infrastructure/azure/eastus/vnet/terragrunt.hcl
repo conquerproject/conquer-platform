@@ -28,8 +28,8 @@ inputs = {
 
 
 terraform {
-#   source = "git::https://github.com/conquerproject/tf-modules.git//azure-vnet?ref=azure-vnet-v0.1.0" 
-   source = "../../../../../tf-modules/azure-vnet/"
+   source = "git::https://github.com/conquerproject/tf-modules.git//azure-vnet?ref=azure-vnet-v0.1.0" 
+#   source = "../../../../../tf-modules/azure-vnet/"
 }
 
 include "tg_shared_configs" {
