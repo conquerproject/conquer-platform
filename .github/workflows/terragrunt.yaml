@@ -1,91 +1,20 @@
 name: 'Terragrunt'
+
 on:
-  - pull_request
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - closed
 
-env:
-  tf_version: '1.7.4'
-  tg_version: '0.54.19'
-
-jobs:
-  #https://github.com/dorny/paths-filter?tab=readme-ov-file#examples
-  changes:
-    runs-on: ubuntu-latest
-
+jobs: 
+  terragrunt:
+    uses: conquerproject/reusable-workflows/.github/workflows/terragrunt.yaml@feat/terragrunt-workflow-#2
     permissions:
-      pull-requests: read
-      contents: read
-
-    steps:
-      - name: check checkout
-        uses: actions/checkout@main
-
-      - name: check changes
-        uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          list-files: json
-          filters: |
-            terragrunt:
-              - added|modified: '**/terragrunt.hcl'
-
-  #  checks:
-  #    runs-on: ubuntu-latest
-  #    steps:
-  #      - name: 'Checkout'
-  #        uses: actions/checkout@main
-  #
-  #      - name: Check terragrunt HCL
-  #        uses: gruntwork-io/terragrunt-action@v2
-  #        with:
-  #          tf_version: ${{ env.tf_version }}
-  #          tg_version: ${{ env.tg_version }}
-  #          tg_dir: ${{ env.working_dir }}
-  #          tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
-
-  #  plan:
-  #    runs-on: ubuntu-latest
-  #    needs: [changes]
-  #    if: ${{ needs.changes.outputs.terragrunt == 'true' }}
-  #    concurrency: ${{ matrix.file_job.file }}
-  #    
-  #    strategy:
-  #      matrix:
-  #        file_job: ${{ fromJSON(needs.changes.outputs.terragrunt_files) }}
-  #
-  #    env:
-  #      TGRUNT_FILE: ${{ matrix.file_job.file }}
-  #    
-  #    permissions:
-  #      contents: read
-  #      pull-requests: write
-  #
-  #    steps:
-  #      - name: 'Checkout'
-  #        uses: actions/checkout@main
-  #
-  #      - name: Plan
-  #        uses: gruntwork-io/terragrunt-action@v2
-  #        with:
-  #          tf_version: ${{ env.tf_version }}
-  #          tg_version: ${{ env.tg_version }}
-  #          tg_dir: ${{ env.TGRUNT_FILE }}
-  #          tg_command: 'plan'
-
-  #  deploy:
-  #    runs-on: ubuntu-latest
-  #    needs: [ plan ]
-  #    environment: 'prod'
-  #    if: github.ref == 'refs/heads/main'
-  #    steps:
-  #      - name: 'Checkout'
-  #        uses: actions/checkout@main
-  #
-  #      - name: Deploy
-  #        uses: gruntwork-io/terragrunt-action@v2
-  #        with:
-  #          tf_version: ${{ env.tf_version }}
-  #          tg_version: ${{ env.tg_version }}
-  #          tg_dir: ${{ env.working_dir }}
-  #          tg_command: 'apply'
-
-
+      id-token: write
+      contents: write
+      pull-requests: write
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
