@@ -1,10 +1,10 @@
-#!/bin/bash 
+#!/bin/bash
 
 set -o nounset                              # Treat unset variables as an error
 
-subscription_id="$(grep  "^subscription_id" ../az-eastus-constants.yaml | awk '{print $2}' | sed 's/"//g')" 
-environment="$(grep  "^environment" ../az-eastus-constants.yaml | awk '{print $2}' | sed 's/"//g')"
-region="$(grep  "^region" ../az-eastus-constants.yaml | awk '{print $2}' | sed 's/"//g')"
+subscription_id="$(grep  "^subscription_id" ../az-dev-constants.yaml | awk '{print $2}' | sed 's/"//g')"
+environment="$(grep  "^environment" ../az-dev-constants.yaml | awk '{print $2}' | sed 's/"//g')"
+region="$(grep  "^region" ../az-dev-constants.yaml | awk '{print $2}' | sed 's/"//g')"
 app="tfstate"
 
 resourceGroupName="rg-$app-$environment-$region-001"
@@ -27,10 +27,10 @@ fi
 # Create a storage account
 if [[ ! "$(az storage account list -o json | jq -r --arg stg "$storageAccountName" '.[] | select(.name == $stg) | .name')" ]]; then
     az storage account create --name $storageAccountName --resource-group $resourceGroupName --sku Standard_LRS
-    
+
     while [[ "$(az storage account show --name $storageAccountName --resource-group $resourceGroupName --query "provisioningState" -o tsv)" != "Succeeded" ]]; do
         echo "Waiting for storage account creation to complete..."
-        sleep 3 
+        sleep 3
     done
     echo "Storage Account $storageAccountName created"
 else
@@ -47,4 +47,3 @@ else
     echo "Storage Container already in place"
 fi
 printf "\n Azure resources created successfully!"
-
