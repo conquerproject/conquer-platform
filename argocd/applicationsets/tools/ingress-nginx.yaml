@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: "kube-prometheus-stack"
+  name: "ingress-nginx"
   namespace: "argocd"
 spec:
   generators:
@@ -12,21 +12,21 @@ spec:
           - path: "argocd/clusters/aks-conquerproject-dev-01.yaml"
   template:
     metadata:
-      name: "kube-prometheus-stack-{{ clusterName }}"
+      name: "ingress-nginx-{{ clusterName }}"
     spec:
       project: "kube-tools"
       sources:
         - repoURL: "https://github.com/conquerproject/conquer-platform.git"
-          targetRevision: hackthon #"{{ revision }}"
+          targetRevision: "{{ revision }}"
           ref: valuesRepo
 
-        - repoURL: "https://prometheus-community.github.io/helm-charts"
-          chart: "kube-prometheus-stack"
-          targetRevision: "62.3"
+        - repoURL: "https://kubernetes.github.io/ingress-nginx"
+          chart: "ingress-nginx"
+          targetRevision: "4.10"
           helm:
-            releaseName: "kube-prometheus-stack"
+            releaseName: "ingress-nginx"
             valueFiles:
-              - $valuesRepo/argocd/defaults/grafana-stack/kube-prometheus-stack/values.yaml
+              - $valuesRepo/argocd/defaults/ingress-nginx/values.yaml
 
       destination:
         server: "{{ server }}"

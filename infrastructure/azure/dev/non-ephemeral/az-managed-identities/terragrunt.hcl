@@ -20,9 +20,15 @@ inputs = {
   rg              = local.environment-constants.default_rg
   location        = local.environment-constants.region
 
-  name = [
-    "cert-manager",
-    "external-dns",
+  identities = [
+    {
+      name = "cert-manager"
+      role = "DNS Zone Contributor"
+    },
+    {
+      name = "external-dns"
+      role = "DNS Zone Contributor"
+    },
   ]
 
   tags = merge(

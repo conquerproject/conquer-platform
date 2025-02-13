@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: "votingapp"
+  namespace: "argocd"
+spec:
+  generators:
+    - git:
+        repoURL: "https://github.com/conquerproject/conquer-platform.git"
+        revision: "main"
+        files:
+          - path: "argocd/clusters/aks-conquerproject-dev-01.yaml"
+  template:
+    metadata:
+      name: "votingapp-{{ clusterName }}"
+    spec:
+      project: "apps"
+      source:
+        repoURL: "https://github.com/benhur-araujo/kubernetes-application-developer.git"
+        targetRevision: "{{ revision }}"
+        path: votingapp/k8s-manifests
+        directory:
+          recurse: true
+
+      destination:
+        server: "{{ server }}"
+        namespace: "votingapp"
+
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - "CreateNamespace=true"

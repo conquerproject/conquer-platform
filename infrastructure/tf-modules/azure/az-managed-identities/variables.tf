@@ -8,9 +8,12 @@ variable "location" {
   type        = string
 }
 
-variable "name" {
+variable "identities" {
   description = "AZ Managed Identity name"
-  type        = set(string)
+  type = list(object({
+    name = string
+    role = string
+  }))
 }
 
 variable "rg" {

@@ -1,0 +1,6 @@
+subscription_id: "907cde31-ecc8-45c6-adb3-3c86455c885b"
+region: "eastus"
+environment: "dev"
+
+tags:
+  environment: "dev"
