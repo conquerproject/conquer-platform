@@ -1,2 +1,37 @@
+# https://github.com/bitnami/charts/tree/main/bitnami/redis
+architecture: "replication"
+
 auth:
   enabled: false
+  sentinel: false
+
+sentinel:
+  enabled: true
+  containerPorts:
+    sentinel: 26379
+  startupProbe:
+    enabled: true
+  readinessProbe:
+    enabled: true
+  livenessProbe:
+    enabled: true
+
+  # resources:
+
+replica:
+  replicaCount: 3
+  startupProbe:
+    enabled: true
+  readinessProbe:
+    enabled: true
+  livenessProbe:
+    enabled: true
+
+  persistence:
+    enabled: true
+    path: /data
+    accessModes:
+      - "ReadWriteOnce"
+    size: "8Gi"
+  
+    # resources:
