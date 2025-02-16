@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: "redis"
+  namespace: "argocd"
+spec:
+  generators:
+    - git:
+        repoURL: "https://github.com/conquerproject/conquer-platform.git"
+        revision: "main"
+        files:
+          - path: "argocd/clusters/aks-conquerproject-dev-01.yaml"
+  template:
+    metadata:
+      name: "redis-{{ clusterName }}"
+    spec:
+      project: "apps"
+      sources:
+        - repoURL: "https://github.com/conquerproject/conquer-platform.git"
+          targetRevision: "{{ revision }}"
+          ref: valuesRepo
+
+        - repoURL: "registry-1.docker.io/bitnamicharts"
+          path: "redis"
+          chart: "redis"
+          targetRevision: "20.7.0"
+          helm:
+            releaseName: "redis"
+            valueFiles:
+              - $valuesRepo/argocd/defaults/apps-resources/redis/values.yaml
+
+      destination:
+        server: "{{ server }}"
+        namespace: "votingapp-{{ environment }}"
+
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - "CreateNamespace=true"
