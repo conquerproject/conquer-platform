@@ -54,7 +54,7 @@ main() {
     install_argo
     apply_root_app
     output_admin_password
-#    port_forward
+    port_forward
 }
 
 main

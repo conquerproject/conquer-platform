@@ -16,15 +16,15 @@ spec:
     spec:
       project: "apps"
       source:
-        repoURL: "https://github.com/benhur-araujo/kubernetes-application-developer.git"
+        repoURL: "https://github.com/conquerproject/votingapp.git"
         targetRevision: "{{ revision }}"
-        path: votingapp/k8s-manifests
+        path: "argocd/{{ environment}}"
         directory:
           recurse: true
 
       destination:
         server: "{{ server }}"
-        namespace: "votingapp"
+        namespace: "votingapp-{{ environment }}"
 
       syncPolicy:
         automated: {}

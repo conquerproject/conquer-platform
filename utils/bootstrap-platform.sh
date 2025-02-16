@@ -2,7 +2,7 @@
 
 set -e
 
-AZ_SUBSCRIPTION="conquerproject"
+AZ_SUBSCRIPTION="conquerproject-dev"
 RESOURCE_GROUP="rg-conquerplatform-dev-01"
 AKS_NAME="aks-conquerproject-dev-01"
 TERRAGRUNT_CONFIG="$(git rev-parse --show-toplevel)/infrastructure/azure/dev/ephemeral/aks/terragrunt.hcl"
