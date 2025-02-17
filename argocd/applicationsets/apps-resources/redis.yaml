@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: "redis"
+  name: "sample-redis"
   namespace: "argocd"
 spec:
   generators:
@@ -12,7 +12,7 @@ spec:
           - path: "argocd/clusters/aks-conquerproject-dev-01.yaml"
   template:
     metadata:
-      name: "redis-{{ clusterName }}"
+      name: "sample-redis"
     spec:
       project: "apps"
       sources:
@@ -31,7 +31,7 @@ spec:
 
       destination:
         server: "{{ server }}"
-        namespace: "votingapp-{{ environment }}"
+        namespace: "sample-apps-{{ environment }}"
 
       syncPolicy:
         automated: {}
